@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "texted-tool": {
+      "commandName": "Project",
+      "commandLineArgs": "-if C:\\dev\\breeze\\cerber\\src\\common\\CommonAssemblyInfo.cs.template C:\\dev\\breeze\\cerber\\src\\common\\CommonAssemblyInfo.cs.temp \"\\[VERSION\\]\" \"1.0.0.4\""
+    }
+  }
+}
