@@ -1,5 +1,5 @@
 # texted-tool
-This simple .NET Core CLI tool allows to search and replace strong in text file.
+This simple .NET Core CLI tool allows to search and replace string in text file.
 
 ## Installation
 
