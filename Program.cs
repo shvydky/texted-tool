@@ -1,9 +1,9 @@
+using McMaster.Extensions.CommandLineUtils;
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
-using McMaster.Extensions.CommandLineUtils;
 
 namespace texted_tool
 {
@@ -26,6 +26,9 @@ namespace texted_tool
         [Argument(3, Description = "String Value")]
         [Required]
         public string Value { get; }
+
+        [Option(Description = "The RegEx pattern. Only matched named group 'value' of Value will be used to replace.", LongName = "extract", ShortName = "e")]
+        public string Extract { get; }
 
         [Option(Description = "This option indicate that tool chould update target file only if changed (slow).", LongName = "if-changed", ShortName = "if")]
         public bool OnlyIfChanged { get; }
@@ -50,7 +53,22 @@ namespace texted_tool
                                 foreach (Match m in matches)
                                 {
                                     writer.Write(line.Substring(pos, m.Index));
-                                    writer.Write(Value);
+                                    if (String.IsNullOrEmpty(Extract))
+                                        writer.Write(Value);
+                                    else
+                                    {
+                                        Regex extract = new Regex(Extract);
+                                        var match = extract.Match(Value);
+                                        if (match.Success && match.Groups["value"].Success)
+                                        {
+                                            writer.Write(match.Groups["value"].Value);
+                                        }
+                                        else
+                                        {
+                                            throw new ApplicationException("Specified pattern can't be extracted from Value.");
+                                        }
+
+                                    }
                                     pos += (m.Index - pos + m.Length);
                                 }
                                 writer.WriteLine(pos < line.Length ? line.Substring(pos) : "");
